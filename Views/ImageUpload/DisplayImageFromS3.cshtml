@@ -1,0 +1,21 @@
+@page
+@model List<Amazon.S3.Model.S3Object>
+@{
+    ViewData["Title"] = "DisplayAllImages";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<center>
+    <h1>Display All Images in Gallery Style: </h1>
+    <br />
+    <hr />
+    <br />
+    @foreach (var image in Model)
+    {
+        string imageUrl = "https://" + image.BucketName + ".s3.amazonaws.com/" + image.Key;
+        Console.WriteLine(imageUrl);
+        <div class="text-center">
+        </div>
+    }
+</center>

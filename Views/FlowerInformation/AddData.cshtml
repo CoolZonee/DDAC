@@ -1,0 +1,44 @@
+﻿@model WebApplication3.Models.Flower
+@{
+    ViewData["Title"] = "AddData";
+}
+
+<h1>AddData</h1>
+
+<center>
+    <h1>Add New Flower Information:</h1>
+    <hr />
+    <form asp-action="AddData" method="post" asp-controller="FlowerInformation" enctype="multipart/form-data">
+        <table>
+            <tr>
+                <th>Flower Name: </th>
+                <td><input type="text" name="FlowerName" /></td>
+                <span asp-validation-for="FlowerName" class="text-danger"></span>
+            </tr>
+            <tr>
+                <th>Flower Type: </th>
+                <td><input type="text" name="FlowerType" /></td>
+                <span asp-validation-for="FlowerType" class="text-danger"></span>
+            </tr>
+            <tr>
+                <th>Flower Produced Date: </th>
+                <td><input type="date" name="FlowerProducedDate" /></td>
+                <span asp-validation-for="FlowerProducedDate" class="text-danger"></span>
+            </tr>
+            <tr>
+                <th>Flower Price: </th>
+                <td><input type="text" name="FlowerPrice" /></td>
+                <span asp-validation-for="FlowerPrice" class="text-danger"></span>
+            </tr>
+            <tr>
+                <th>FlowerURL: </th>
+                <td><input type="file" name="imagefile" accept="image/" /></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <input type="submit" name="submit" value="Add Data to table" />
+                </td>
+            </tr>
+        </table>
+    </form>
+</center>

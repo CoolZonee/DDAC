@@ -1,0 +1,47 @@
+﻿@model List<Flower>
+@{
+    ViewData["Title"] = "Index";
+}
+<script>
+    if ("@ViewBag.message") {
+        alert("@ViewBag.messsage")
+    }
+</script>
+
+<center>
+    <h1>Flower Information Management Page</h1>
+    <p><a asp-action="AddData" asp-controller="FlowerInformation">Add New Flower Record</a></p>
+    <table border="1">
+        <tr style="background-color: yellow">
+            <th>Flower ID</th>
+            <th>Flower Name</th>
+            <th>Flower Picture</th>
+            <th>Flower Produced Date</th>
+            <th>Flower Type</th>
+            <th>Flower Price</th>
+            <th>Edit Button</th>
+            <th>Delete Button</th>
+        </tr>
+        @foreach (var flower in Model)
+        {
+            <tr>
+                <td>@flower.FlowerID</td>
+                <td>@flower.FlowerName</td>
+                <td><img src="@flower.FlowerURL" / width="200px" height="200px"></td>
+                <td>@flower.FlowerProducedDate</td>
+                <td>@flower.FlowerType</td>
+                <td>@flower.FlowerPrice</td>
+                <td>
+                    <a asp-action="EditPage" asp-controller="FlowerInformation" asp-route-flowerID="@flower.FlowerID">
+                        Edit
+                    </a>
+                </td>
+                <td>
+                    <a asp-action="DeletePage" asp-controller="FlowerInformation" asp-route-flowerID="@flower.FlowerID">
+                        Delete
+                    </a>
+                </td>
+            </tr>
+        }
+    </table>
+</center>

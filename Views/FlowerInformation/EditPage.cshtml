@@ -1,0 +1,42 @@
+﻿@model Flower
+@{
+    ViewData["Title"] = "EditPage";
+}
+<center>
+    <h1>Edit New Flower Information:</h1>
+    <hr />
+    <form asp-action="processEditFunction" method="post" asp-controller="FlowerInformation">
+        <table>
+            <input type="hidden" asp-for="FlowerID" />
+            <tr>
+                <th><label asp-for="FlowerName"></label></th>
+                <td>
+                    <input asp-for="FlowerName" />
+                </td>
+                <span asp-validation-for="FlowerName" class="text-danger">
+
+                </span>
+            </tr>
+            <tr>
+                <th><label asp-for="FlowerType"></label></th>
+                <td><input asp-for="FlowerType" /></td>
+                <span asp-validation-for="FlowerType" class="text-danger"></span>
+            </tr>
+            <tr>
+                <th><label asp-for="FlowerProducedDate"></label></th>
+                <td><input asp-for ="FlowerProducedDate" /></td>
+                <span asp-validation-for="FlowerProducedDate" class="text-danger"></span>
+            </tr>
+            <tr>
+                <th><label asp-for="FlowerPrice"></label> </th>
+                <td><input asp-for="FlowerPrice" /></td>
+                <span asp-validation-for="FlowerPrice" class="text-danger"></span>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <input type="submit" name="submit" value="Save Data" />
+                </td>
+            </tr>
+        </table>
+    </form>
+</center>
