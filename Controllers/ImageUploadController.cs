@@ -11,6 +11,7 @@ using Amazon.S3.Model;
 using Microsoft.Extensions.Configuration; // appsettings.json
 using System.IO;
 using Microsoft.AspNetCore.Http;//ftp
+using System.Net.Mime;
 
 namespace WebApplication3.Controllers
 {
@@ -55,6 +56,7 @@ namespace WebApplication3.Controllers
                 {
                     return BadRequest("It is an empty file. Unable to upload!");
                 }
+
                 else if (image.Length > 1048576) //not more than 1MB
                 {
                     return BadRequest("It is over 1MB limit of size. Unable to upload!");
@@ -124,7 +126,7 @@ namespace WebApplication3.Controllers
 
             try
             {
-                //s3 token - telling whether still image in the S3 bucket
+                // s3 token - telling whether still image in the S3 bucket
                 string token = null;
                 do
                 {
@@ -135,20 +137,25 @@ namespace WebApplication3.Controllers
                     };
 
                     //getting response (images) back from the S3
-                    ListObjectsResponse response = await awsS3client.ListObjectsAsync(request).ConfigureAwait(false);
+                    ListObjectsResponse response = await awsS3client.ListObjectsAsync(request).ConfigureAwait(true);
                     images.AddRange(response.S3Objects);
                     token = response.NextMarker;
                 } while (token != null);
+                return View(images);
             }
+
             catch (AmazonS3Exception ex)
             {
                 return BadRequest("Error: " + ex.Message);
             }
-            return View(images);
+            catch (Exception ex)
+            {
+                return BadRequest("Error: " + ex.Message);
+            }
         }
 
         //function 4: Delete image from S3
-        public async Task<IActionResult> DeleteImage(string ImageName)
+        public async Task<IActionResult> DeleteImage(string ImageKey)
         {
             //1. add credential for action
             List<string> values = getValues();
@@ -160,7 +167,7 @@ namespace WebApplication3.Controllers
                 DeleteObjectRequest deleteRequest = new DeleteObjectRequest
                 {
                     BucketName = s3BucketName,
-                    Key = ImageName
+                    Key = ImageKey
                 };
 
                 await awsS3client.DeleteObjectAsync(deleteRequest);
@@ -171,7 +178,49 @@ namespace WebApplication3.Controllers
             }
             return RedirectToAction("DisplayImageFromS3", "ImageUpload");
         }
-        
+
+        public async Task<IActionResult> DownloadImage(string ImageKey)
+        {
+            List<string> values = getValues();
+            var awsS3client = new AmazonS3Client(values[0], values[1], values[2], RegionEndpoint.USEast1);
+
+            Stream downloadStream = null;
+
+            try
+            {
+                GetObjectRequest request = new GetObjectRequest
+                {
+                    BucketName = s3BucketName,
+                    Key = ImageKey
+                };
+
+                GetObjectResponse response = await awsS3client.GetObjectAsync(request);
+
+                using (downloadStream = response.ResponseStream)
+                {
+                    downloadStream = new MemoryStream();
+                    await response.ResponseStream.CopyToAsync(downloadStream);
+                    downloadStream.Position = 0; // copy start from position 0 until the end
+                }
+
+            }
+            catch (AmazonS3Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+            // make option either direct view in PC / direct download to PC
+            string imageFile = Path.GetFileName(ImageKey);
+
+            Response.Headers.Add(
+                "Content-Disposition", new ContentDisposition
+                {
+                    FileName = imageFile,
+                    Inline = false // true means direct view in PC, false means direct download to PC
+                }.ToString());
+
+            return File(downloadStream, "image/jpeg");
+        }
     }
 
 
