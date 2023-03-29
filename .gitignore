@@ -1,0 +1,36 @@
+# ASP.NET Core
+bin/
+obj/
+*.dll
+*.exe
+*.pdb
+*.user
+*.vscode
+*.vs
+*/Debug/*
+*/Release/*
+*.log
+*.log.*
+*.sqlite
+*.sqlite3
+*.db
+*.tmp
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+.vscode/
+# ASP.NET Core Identity
+/Data/
+/node_modules/
+/obj/
+/bin/
+/Debug/
+/Release/
+/.vs/
+/.vscode/
+*.log
+*.sqlite
+*.sqlite3
+*.db
+*.tmp
