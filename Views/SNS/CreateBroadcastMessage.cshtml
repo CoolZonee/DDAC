@@ -1,0 +1,16 @@
+@{
+    ViewData["Title"] = "CreateBroadcastMessage";
+}
+
+<center>
+    <h1>Create Broadcast Message</h1>
+    <br />
+    <hr />
+    <br />
+    <form method="post" asp-action="BroadcastMessage" asp-controller="SNS">
+        <div class="form-group">
+            <input type="textarea" name="message" class="form-control" />
+            <button class="btn-info mt-4 rounded-pill p-2">Click here to broadcast!</button>
+        </div>
+    </form>
+</center>

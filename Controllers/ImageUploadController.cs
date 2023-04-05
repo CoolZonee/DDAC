@@ -221,6 +221,32 @@ namespace WebApplication3.Controllers
 
             return File(downloadStream, "image/jpeg");
         }
+        public IActionResult presignURLImage(string imageKey)
+        {
+            List<string> getKeys = getValues();
+
+            var awsS3client = new AmazonS3Client(getKeys[0], getKeys[1], getKeys[2], RegionEndpoint.USEast1);
+            ViewBag.presignURL = "";
+            //generate the request
+            try
+            {
+                GetPreSignedUrlRequest request = new GetPreSignedUrlRequest
+                {
+                    BucketName = s3BucketName,
+                    Key = imageKey,
+                    Expires = DateTime.Now.AddMinutes(1)
+                };
+
+                ViewBag.presignURL = awsS3client.GetPreSignedURL(request);
+            }
+
+            catch (AmazonS3Exception ex)
+            {
+                throw new Exception("Error: " + ex.Message);
+            }
+
+            return View();
+        }
     }
 
 
