@@ -22,7 +22,7 @@ namespace WebApplication3.Controllers
             _logger = logger;
         }
 
-        private const string topicARN = "arn:aws:sns:us-east-1:009530277310:flower";
+        private const string topicARN = "arn:aws:sns:us-east-1:009530277310:EmailBroadcast";
 
         //function 1: connection string to the AWS Account
         private List<string> getValues()
